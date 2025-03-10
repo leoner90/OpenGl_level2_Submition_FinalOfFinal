@@ -90,3 +90,6 @@ mat4 matrixReflection = mat4(1 - 2 * a * a, -2 * a * b, -2 * a * c, 0,
 	-2 * a * b, 1 - 2 * b * b, -2 * b * c, 0,
 	-2 * a * c, -2 * b * c, 1 - 2 * c * c, 0,
 	-2 * a * d, -2 * b * d, -2 * c * d, 1);
+
+//player pos
+vec3 playerPos;

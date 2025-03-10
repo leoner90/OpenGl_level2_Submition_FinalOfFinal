@@ -96,3 +96,6 @@ extern float waterLevel;
 //reflection
 extern mat4 matrixReflection;
 extern float a , b, c, d;
+
+//player pos
+extern vec3 playerPos;

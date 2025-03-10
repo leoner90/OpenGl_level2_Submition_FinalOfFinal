@@ -122,7 +122,7 @@ void PlanareReflectioOringBaseRender()
 		program.sendUniform("materialDiffuse", vec3(1, 1, 1));
 		m = translate(m, vec3(6, waterLevel - 9, 6));
 
-		program.sendUniform("transpparancyLvl", 0.55f);
+		program.sendUniform("transpparancyLvl", 0.45f);
 
 		waterUnderlayers.render(m);
 
@@ -132,7 +132,7 @@ void PlanareReflectioOringBaseRender()
 		program.sendUniform("materialDiffuse", vec3(0.0, 0.412, 0.580));
 		m = matrixView;
 		m = translate(m, vec3(0, waterLevel - 0.3, 0));
-		program.sendUniform("transpparancyLvl", 0.6f);
+		program.sendUniform("transpparancyLvl", 0.45f);
 		waterUnderlayers.render(m);
 
 		//WATER RENDER
@@ -198,10 +198,12 @@ void playerRender(mat4& matrixView, float time)
 	mat3 cameraRotation = mat3(inverseView);
 	vec3 forwardDirection = vec3(inverse(matrixView)[2]);
 
+	// player pos based on camera pos - forward vector
+	playerPos = cameraPosition - (forwardDirection * vec3(3.5, 2.2, 3.5));
 	m = matrixView;
-	m  = translate(m, cameraPosition - (forwardDirection * vec3(2.3, 2.2, 2.3))); // player pos based on camera pos - forward vector
-	m = translate(m, vec3(0, -1.9f, 0));
-	m = scale(m, vec3(0.012f, 0.012f, 0.012f));
+	m  = translate(m, playerPos); 
+	m = translate(m, vec3(0, -2.1f, 0));
+	
 
 	mat4 noYRotation = mat4
 	(
@@ -215,9 +217,10 @@ void playerRender(mat4& matrixView, float time)
 	m *= noYRotation;
 
 	// rotation
-	m = rotate(m, radians(180.f), vec3(1, 0, 0)); // Rotate only X
-	m = rotate(m, radians(180.f), vec3(0, 0, 1)); // Rotate only Z
+	m = rotate(m, radians(180.f), vec3(1, 0, 0));
+	m = rotate(m, radians(180.f), vec3(0, 0, 1));
 
+	m = scale(m, vec3(0.012f, 0.012f, 0.012f));
 	player.render(m);
 }
 
@@ -282,7 +285,7 @@ void onRender()
 		* matrixView;
  
 	// move the camera up following the profile of terrain (Y coordinate of the terrain)
-	float terrainY = -terrain.getInterpolatedHeight(inverse(matrixView)[3][0] , inverse(matrixView)[3][2]);
+	float terrainY = -terrain.getInterpolatedHeight(playerPos.x, playerPos.z);
 	matrixView = translate(matrixView, vec3(0, terrainY, 0));
 
 	//program.sendUniform("matrixView", matrixView);
